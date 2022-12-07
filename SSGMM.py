@@ -17,7 +17,7 @@ class SSGaussianMixture:
         z_mat = np.eye(self.n_categories)[y_train]
         for i in range(max_iter):
             # M step
-            gammas = self.predict_prob(X_test)
+            gammas = self.cal_gamma(X_test)
             n_vec = np.array([z_mat[:, k].sum() + gammas[:, k].sum() for k in range(self.n_categories)])
             # E step
             for k in range(self.n_categories):
@@ -45,13 +45,16 @@ class SSGaussianMixture:
              range(self.n_categories)])
         return probs / probs.sum()
 
-    def predict_prob(self, X: np.ndarray) -> np.ndarray:
+    def cal_gamma(self, X: np.ndarray) -> np.ndarray:
         return np.array([self.__gamma(x) for x in X])
+
+    def predict_proba(self, X: np.ndarray) -> np.ndarray:
+        return self.cal_gamma(X).max(axis=1)
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         """
         :param X: matrix
         :return: most likely labels
         """
-        gammas = self.predict_prob(X)
+        gammas = self.cal_gamma(X)
         return np.array([np.argmax(probs) for probs in gammas])

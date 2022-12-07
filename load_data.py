@@ -9,5 +9,8 @@ labels = anndata.obs['louvain']
 le = LabelEncoder()
 represents = pd.DataFrame(anndata.obsm['X_pca'], index=labels.index)
 represents['cell'] = le.fit_transform(labels)
-represents.to_csv('pbmc_3k.csv', index=True)
+represents.to_csv('data/pbmc_3k.csv', index=True)
+umaps = pd.DataFrame((anndata.obsm['X_umap']), index=labels.index)
+umaps['cell'] = represents['cell']
+umaps.to_csv('data/umap.csv', index=True)
 joblib.dump(le, 'data/encoder.joblib')
