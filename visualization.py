@@ -30,10 +30,10 @@ def draw_umap(data: pd.DataFrame, cutoff=0.):
 
 
 def heatmap(data):
-    ct = labels = [x for x in color_map.keys() if x != 'unknown']
+    ct = [x for x in color_map.keys() if x != 'unknown']
     cm = confusion_matrix(data['cell'], data['pre'], labels=ct)
     df_cm = pd.DataFrame(cm, index=ct, columns=ct)
-    sn.heatmap(df_cm, cmap="BuPu")
+    sn.heatmap(df_cm, annot=True)
     plt.subplots_adjust(bottom=0.35, left=.25)
     plt.savefig('figures/cm.pdf')
     plt.clf()
@@ -63,3 +63,4 @@ if __name__ == '__main__':
     plt.ylabel('macro F1')
     plt.savefig('figures/f1.pdf')
     plt.clf()
+    heatmap(data)
